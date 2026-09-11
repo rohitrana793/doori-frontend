@@ -1,0 +1,19 @@
+/* ✅ CORRECT - @import statements at the top */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Karla:ital,wght@0,200..800;1,200..800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-cormorant: "Cormorant", serif;
+  --font-karla: "Karla", sans-serif;
+  --color-primary: #48b033;
+  --color-secondary: #1a202c;
+  --color-optional: #212834;
+  --color-button: #35a928;
+}
+
+@layer base {
+  body {
+    font-family: var(--font-karla);
+  }
+}

@@ -1,0 +1,610 @@
+import { useState } from "react";
+import ShowOrderModal from "../../components/commom/ShowOrderModal";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { customerDetailsSchema } from "../../schema/customerDetailsSchema";
+
+const MalmoPage = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(customerDetailsSchema),
+  });
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const title = "malmö bergsgatan";
+
+  const onSubmit = (data) => {
+    console.log("Data", data);
+  };
+
+  return (
+    <section className="min-h-screen w-full bg-secondary pt-16 pb-10 md:pt-20 md:pb-14">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8">
+        <div className="mb-3 md:mb-5">
+          <h1
+            className="
+              font-cormorant
+              text-[36px]
+              font-medium
+              uppercase
+              tracking-wide
+              text-white
+              sm:text-[40px]
+              md:text-[44px]
+            "
+          >
+            Malmö
+          </h1>
+        </div>
+
+        <div
+          className="
+            relative
+            h-auto
+            min-h-[400px]
+            w-full
+            overflow-hidden
+            sm:min-h-[420px]
+            md:h-[300px]
+            md:min-h-0
+            lg:h-[320px]
+          "
+        >
+          <img
+            src="/images/opening-hours.jpg"
+            alt=""
+            aria-hidden="true"
+            className="
+              absolute
+              inset-0
+              h-full
+              w-full
+              object-cover
+            "
+          />
+
+          <div className="absolute inset-0 bg-white/95" />
+
+          <div
+            className="
+              relative
+              z-10
+              flex
+              h-full
+              w-full
+              flex-col
+              justify-center
+              px-6
+              py-10
+              sm:px-10
+              md:flex-row
+              md:items-center
+              md:px-14
+              md:py-0
+              lg:px-16
+            "
+          >
+            <div
+              className="
+                flex
+                w-full
+                items-center
+                md:w-[42%]
+              "
+            >
+              <h2
+                className="
+                  font-karla
+                  text-[28px]
+                  font-bold
+                  tracking-wide
+                  text-primary
+                  sm:text-[32px]
+                "
+              >
+                Opening hours
+              </h2>
+            </div>
+
+            <div
+              className="
+                mt-7
+                flex
+                w-full
+                flex-col
+                gap-2
+                font-karla
+                text-base
+                font-medium
+                sm:mt-8
+                sm:gap-3
+                sm:text-lg
+                md:mt-0
+                md:w-[58%]
+                md:text-[20px]
+              "
+            >
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Monday:</span>
+                <span>11.00 – 21.00</span>
+              </div>
+
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Tuesday:</span>
+                <span>11.00 – 21.00</span>
+              </div>
+
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Wednesday:</span>
+                <span>11.00 – 21.00</span>
+              </div>
+
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Thursday:</span>
+                <span>11.00 – 22.00</span>
+              </div>
+
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Friday:</span>
+                <span>12.00 – 22.00</span>
+              </div>
+
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Saturday:</span>
+                <span>12.00 – 21.00</span>
+              </div>
+
+              <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[175px_1fr]">
+                <span>Sunday:</span>
+                <span>CLOSED</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="
+            flex
+            min-h-[180px]
+            flex-col
+            items-center
+            justify-center
+            bg-[#30394b]
+            px-4
+            py-8
+            text-center
+            sm:min-h-[190px]
+            md:min-h-[195px]
+          "
+        >
+          <p
+            className="
+              font-karla
+              text-base
+              font-medium
+              text-white
+              sm:text-lg
+              md:text-[20px]
+            "
+          >
+            Order food online for takeout:
+          </p>
+
+          <div
+            className="
+              mt-3
+              flex
+              w-full
+              flex-col
+              items-center
+              justify-center
+              gap-3
+              sm:mt-4
+              sm:w-auto
+              sm:flex-row
+              sm:gap-6
+              md:gap-8
+            "
+          >
+            <button
+              type="button"
+              onClick={() => setShowOrderModal(true)}
+              className="
+                w-full
+                max-w-[220px]
+                cursor-pointer
+                rounded-full
+                bg-primary
+                px-7
+                py-3
+                font-karla
+                text-sm
+                font-semibold
+                uppercase
+                tracking-[2px]
+                text-white
+                transition-all
+                duration-300
+                hover:bg-button
+                sm:w-auto
+                sm:max-w-none
+                sm:px-9
+                sm:py-3.5
+                md:text-base
+              "
+            >
+              Order Here
+            </button>
+
+            <button
+              type="button"
+              className="
+                w-full
+                max-w-[220px]
+                cursor-pointer
+                rounded-full
+                bg-primary
+                px-7
+                py-3
+                font-karla
+                text-sm
+                font-semibold
+                uppercase
+                tracking-[2px]
+                text-white
+                transition-all
+                duration-300
+                hover:bg-button
+                sm:w-auto
+                sm:max-w-none
+                sm:px-9
+                sm:py-3.5
+                md:text-base
+              "
+            >
+              Book a Table
+            </button>
+          </div>
+        </div>
+
+        <div
+          className="
+            mt-8
+            w-full
+            border
+            border-primary
+            p-5
+            sm:mt-10
+            sm:p-8
+            md:p-10
+            lg:p-12
+          "
+        >
+          <div
+            className="
+              grid
+              grid-cols-1
+              gap-10
+              md:grid-cols-2
+              md:gap-12
+              lg:gap-14
+            "
+          >
+            <div className="flex w-full flex-col">
+              <h2
+                className="
+                  mb-7
+                  font-karla
+                  text-2xl
+                  font-medium
+                  text-white
+                  sm:mb-8
+                  sm:text-3xl
+                "
+              >
+                Contact us
+              </h2>
+
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="flex w-full flex-col gap-5 sm:gap-6"
+              >
+                <div className="w-full">
+                  <label
+                    htmlFor="name"
+                    className="
+                      mb-2
+                      block
+                      font-karla
+                      text-sm
+                      font-medium
+                      text-white
+                      sm:text-base
+                    "
+                  >
+                    Name
+                  </label>
+
+                  <input
+                    id="name"
+                    {...register("name")}
+                    type="text"
+                    className="
+                      h-12
+                      w-full
+                      border
+                      border-gray-400
+                      bg-transparent
+                      px-4
+                      font-karla
+                      text-base
+                      text-white
+                      outline-none
+                      transition-colors
+                      focus:border-primary
+                      sm:h-14
+                    "
+                  />
+                  {errors.name && (
+                    <p className="text-red-800 bg-white py-2 px-2 border border-red-400 text-[16px] font-medium">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="w-full">
+                  <label
+                    htmlFor="email"
+                    className="
+                      mb-2
+                      block
+                      font-karla
+                      text-sm
+                      font-medium
+                      text-white
+                      sm:text-base
+                    "
+                  >
+                    Email <span className="text-red-500">*</span>
+                  </label>
+
+                  <input
+                    id="email"
+                    {...register("email")}
+                    type="email"
+                    className="
+                      h-12
+                      w-full
+                      border
+                      border-gray-400
+                      bg-transparent
+                      px-4
+                      font-karla
+                      text-base
+                      text-white
+                      outline-none
+                      transition-colors
+                      focus:border-primary
+                      sm:h-14
+                    "
+                  />
+                  {errors.email && (
+                    <p className="text-red-800 bg-white py-2 px-2 border border-red-400 text-[16px] font-medium mt-2">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="w-full">
+                  <label
+                    htmlFor="message"
+                    className="
+                      mb-2
+                      block
+                      font-karla
+                      text-sm
+                      font-medium
+                      text-white
+                      sm:text-base
+                    "
+                  >
+                    Message <span className="text-red-500">*</span>
+                  </label>
+
+                  <textarea
+                    id="message"
+                    {...register("message")}
+                    rows={7}
+                    className="
+                      min-h-40
+                      w-full
+                      resize-y
+                      border
+                      border-gray-400
+                      bg-transparent
+                      px-4
+                      py-3
+                      font-karla
+                      text-base
+                      text-white
+                      outline-none
+                      transition-colors
+                      focus:border-primary
+                      sm:min-h-[190px]
+                    "
+                  />
+                  {errors.message && (
+                    <p className="text-red-800 bg-white py-2 px-2 border border-red-400 text-[16px] font-medium">
+                      {errors.message.message}
+                    </p>
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  className="
+                    w-fit
+                    cursor-pointer
+                    rounded-full
+                    bg-primary
+                    px-8
+                    py-3
+                    font-karla
+                    text-sm
+                    font-semibold
+                    uppercase
+                    tracking-[2px]
+                    text-white
+                    transition-all
+                    duration-300
+                    hover:bg-button
+                    sm:px-9
+                    sm:py-3.5
+                  "
+                >
+                  Submit
+                </button>
+              </form>
+            </div>
+
+            <div
+              className="
+                flex
+                w-full
+                items-center
+                justify-center
+                md:justify-end
+              "
+            >
+              <img
+                src="/images/branch/malmo.jpg"
+                alt="Doori Malmö restaurant"
+                className="
+                  h-[350px]
+                  w-full
+                  object-cover
+                  sm:h-[420px]
+                  md:h-[480px]
+                  md:w-[80%]
+                  lg:h-[515px]
+                  xl:h-[540px]
+                "
+              />
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="
+            mt-3
+            grid
+            w-full
+            grid-cols-1
+            gap-3
+            md:grid-cols-[29%_1fr]
+          "
+        >
+          <div
+            className="
+              flex
+              min-h-[350px]
+              flex-col
+              bg-primary
+              px-6
+              py-8
+              sm:min-h-[370px]
+              sm:px-9
+              sm:py-9
+              md:min-h-[450px]
+              md:px-10
+              md:py-10
+              lg:min-h-[450px]
+              lg:px-11
+            "
+          >
+            <h2
+              className="
+                font-karla
+                text-2xl
+                font-bold
+                leading-tight
+                text-white
+                sm:text-[32px]
+              "
+            >
+              Contact details
+            </h2>
+
+            <div
+              className="
+                mt-5
+                font-karla
+                text-sm
+                leading-5
+                text-[#172017]
+                sm:mt-6
+                sm:text-base
+                sm:leading-6
+                md:text-[17px]
+                md:leading-7
+              "
+            >
+              <p>
+                Bergsgatan 15A
+                <br />
+                211 54 Malmö
+              </p>
+
+              <p className="mt-4">
+                E-mail:{" "}
+                <a
+                  href="mailto:info@doori.se"
+                  className="underline underline-offset-2"
+                >
+                  info@doori.se
+                </a>
+              </p>
+
+              <p className="mt-1">
+                Telephone:{" "}
+                <a
+                  href="tel:0760-093707"
+                  className="underline underline-offset-2"
+                >
+                  0760-093707
+                </a>
+              </p>
+            </div>
+          </div>
+
+          <div
+            className="
+              h-[350px]
+              w-full
+              overflow-hidden
+              sm:h-[370px]
+              md:h-[450px]
+            "
+          >
+            <iframe
+              src="https://www.google.com/maps?q=Bergsgatan+15A,+211+54+Malmö,+Sweden&output=embed"
+              className="h-full w-full border-0"
+              loading="lazy"
+              allowFullScreen
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Bergsgatan 15A Map"
+            />
+          </div>
+        </div>
+      </div>
+
+      {showOrderModal && (
+        <ShowOrderModal setShowOrderModal={setShowOrderModal} title={title} />
+      )}
+    </section>
+  );
+};
+
+export default MalmoPage;
