@@ -3,20 +3,50 @@ import ShowOrderModal from "../../components/commom/ShowOrderModal";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customerDetailsSchema } from "../../schema/customerDetailsSchema";
+import { LoaderCircle } from "lucide-react";
+import { showToast } from "../../utils/customToast";
+import { postRequest } from "../../api/apiRequest";
 
 const VaxjoPage = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(customerDetailsSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
   });
   const [showOrderModal, setShowOrderModal] = useState(false);
   const title = "växjö";
+  const [loading, setLoading] = useState(false);
+  const branchName = "Växjö";
 
-  const onSubmit = (data) => {
-    console.log("Data", data);
+  const onSubmit = async (formData) => {
+    setLoading(true);
+    const sendData = {
+      name: formData.name,
+      email: formData.email,
+      message: formData.message,
+      branch_name: branchName,
+    };
+    try {
+      const response = await postRequest("/contact/create/", sendData);
+      showToast({ response: response.message });
+      reset({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      showToast({ error });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -249,7 +279,7 @@ const VaxjoPage = () => {
               </h2>
 
               <form
-                onSubmit={handleSubmit(onSubmit())}
+                onSubmit={handleSubmit(onSubmit)}
                 className="flex w-full flex-col gap-5 sm:gap-6"
               >
                 <div className="w-full">
@@ -404,7 +434,11 @@ const VaxjoPage = () => {
                     sm:py-3.5
                   "
                 >
-                  Submit
+                  {loading ? (
+                    <LoaderCircle size={22} className="animate-spin" />
+                  ) : (
+                    "Submit"
+                  )}
                 </button>
               </form>
             </div>

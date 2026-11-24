@@ -11,7 +11,6 @@ export const showToast = ({ response, error }) => {
     return;
   }
 
-  // Server responded with an HTTP error
   if (error.response) {
     const status = error.response.status;
 
@@ -39,7 +38,6 @@ export const showToast = ({ response, error }) => {
     return;
   }
 
-  // Network error / timeout
   if (error.request) {
     toast.error(
       "Unable to connect to the server. Please check your connection.",
@@ -47,6 +45,5 @@ export const showToast = ({ response, error }) => {
     return;
   }
 
-  // Unknown error
   toast.error(error.message || "Something went wrong. Please try again.");
 };

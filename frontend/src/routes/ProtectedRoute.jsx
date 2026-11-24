@@ -1,5 +1,10 @@
+import { Navigate, Outlet } from "react-router-dom";
+import useAuthStore from "../store/authStore";
+
 const ProtectedRoute = () => {
-  return <div>ProtectedRoute</div>;
+  const user = useAuthStore((state) => state.user);
+
+  return user ? <Outlet /> : <Navigate to="/admin" replace />;
 };
 
 export default ProtectedRoute;

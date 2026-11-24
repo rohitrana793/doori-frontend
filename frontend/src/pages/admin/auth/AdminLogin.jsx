@@ -4,7 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../../../schema/loginSchema";
 import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
+import { loginRequest } from "../../../api/apiRequest";
+import { showToast } from "../../../utils/customToast";
+import useAuthStore from "../../../store/authStore";
+import { LoaderCircle } from "lucide-react";
 
 const AdminLogin = () => {
   const {
@@ -16,11 +19,24 @@ const AdminLogin = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const { setCredentials, setAccessToken } = useAuthStore();
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (data) => {
-    console.log("Data", data);
-    navigate("/admin/dashboard/");
-    toast.success("Login Successfull");
+  const onSubmit = async (formData) => {
+    setLoading(true);
+    try {
+      const response = await loginRequest(formData.username, formData.password);
+      console.log("Login response", response);
+      console.log("access", response.data.access);
+      setCredentials(response?.data?.user, response.data.access);
+      setAccessToken(response?.data?.access);
+      navigate("/admin/dashboard/");
+      showToast({ response: response.message });
+    } catch (error) {
+      showToast({ error });
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="min-h-screen font-karla lg:flex">
@@ -167,16 +183,16 @@ const AdminLogin = () => {
           <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label className="mb-2 block text-[12px] font-semibold uppercase tracking-[0.18em] text-secondary">
-                Email Address
+                Username
               </label>
 
               <div className="relative">
                 <input
-                  type="email"
-                  placeholder="admin@example.com"
-                  {...register("email")}
+                  type="text"
+                  placeholder="Enter username"
+                  {...register("username")}
                   className={`h-14 w-full rounded-xl border bg-gray-50 px-5 pr-12 text-sm text-secondary outline-none transition-all placeholder:text-gray-400 focus:bg-white focus:ring-4 ${
-                    errors.email
+                    errors.username
                       ? "border-red-400 focus:border-red-500 focus:ring-red-500/10"
                       : "border-gray-200 focus:border-primary focus:ring-primary/10"
                   }`}
@@ -187,12 +203,12 @@ const AdminLogin = () => {
                 </span>
               </div>
 
-              {errors.email && (
+              {errors.username && (
                 <p className="mt-2 flex items-center gap-1.5 text-xs font-medium text-red-500">
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-red-100 text-[10px] font-bold">
                     !
                   </span>
-                  {errors.email.message}
+                  {errors.username.message}
                 </p>
               )}
             </div>
@@ -236,12 +252,15 @@ const AdminLogin = () => {
 
             <button
               type="submit"
-              className="group flex h-14 w-full items-center justify-between rounded-xl bg-button px-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#35a928]/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary hover:shadow-xl hover:shadow-[#35a928]/25 cursor-pointer"
+              disabled={loading}
+              className="group flex h-14 w-full  justify-center items-center rounded-xl bg-button px-6 text-[13px] font-semibold uppercase tracking-[0.18em] text-white shadow-lg shadow-[#35a928]/20 transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary hover:shadow-xl hover:shadow-[#35a928]/25 cursor-pointer"
             >
-              <span>Sign In</span>
-
-              <span className="text-xl transition-transform duration-300 group-hover:translate-x-1">
-                <ArrowRight size={20} />
+              <span>
+                {loading ? (
+                  <LoaderCircle size={22} className="animate-spin" />
+                ) : (
+                  "Sign In"
+                )}{" "}
               </span>
             </button>
           </form>

@@ -1,4 +1,21 @@
+import { useEffect, useState } from "react";
+import { showToast } from "../../utils/customToast";
+
 const MenuPage = () => {
+  const [data, setData] = useState([]);
+  const getMenu = async () => {
+    try {
+      const response = await getRequest("/menu/");
+      setData(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      showToast({
+        error,
+      });
+    }
+  };
+
+  useEffect(() => {}, []);
+
   const leftColumn = [
     {
       image: "/images/menu/dumplings.jpg",

@@ -1,6 +1,36 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const AboutPage = () => {
+  const [data, setData] = useState([]);
+  const [resData, setResData] = useState([]);
+
+  const getHistory = async () => {
+    try {
+      const response = await getRequest("/about/history/");
+      console.log("HISTORY DATA:", response.data);
+      setData(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      console.error("GET HISTORY ERROR:", error);
+
+      showToast({
+        error,
+      });
+      setData([]);
+    }
+  };
+
+  const getAbout = async () => {
+    try {
+      const response = await getRequest("/about/who-we-are/");
+      setResData(Array.isArray(response.data) ? response.data : []);
+    } catch (error) {
+      showToast({ error });
+    }
+  };
+
+  useEffect(() => {}, []);
+
   return (
     <section className="min-h-screen w-full bg-secondary pt-28 pb-10 sm:pt-32 md:pt-44 md:pb-14">
       <div className="container mx-auto px-4 sm:px-6 md:px-8">
