@@ -1,39 +1,49 @@
-import { X } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 
-const DeleteModal = (setShowDeleteModal, handleDelete) => {
+const DeleteModal = ({ setShowDeleteModal, handleDelete }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-      <div className="w-full max-w-sm rounded-lg bg-white p-5 shadow-lg">
-        <div className="flex justify-end">
+    <div className="fixed inset-0 z-9999 flex items-start justify-center bg-gray-900/45 px-4 pt-24">
+      <div className="w-full max-w-xs overflow-hidden rounded-xl bg-white shadow-[0_20px_50px_rgba(0,0,0,0.15)]">
+        <div className="flex justify-end px-4 pt-3">
           <button
+            type="button"
             onClick={() => setShowDeleteModal(false)}
-            className="text-gray-400 hover:text-gray-600"
+            className="flex h-7 w-7 cursor-pointer items-center justify-center rounded-full text-gray-400 transition-all hover:bg-gray-100 hover:text-gray-700"
+            aria-label="Close"
           >
-            <X size={20} />
+            <X size={16} />
           </button>
         </div>
 
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-gray-800">
+        <div className="flex justify-center">
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-red-50">
+            <Trash2 size={20} className="text-red-500" />
+          </div>
+        </div>
+
+        <div className="px-5 pb-4 pt-3 text-center">
+          <h2 className="text-base font-semibold text-gray-800">
             Delete Record?
           </h2>
 
-          <p className="mt-2 text-sm text-gray-500">
+          <p className="mt-1 text-xs leading-4 text-gray-500">
             Are you sure you want to delete this record?
           </p>
         </div>
 
-        <div className="mt-6 flex justify-center gap-3">
+        <div className="flex gap-2 border-t border-gray-100 px-4 py-3">
           <button
+            type="button"
             onClick={() => setShowDeleteModal(false)}
-            className="rounded-lg border border-gray-300 px-5 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100"
+            className="flex-1 cursor-pointer rounded-md border border-gray-200 bg-white py-1.5 text-xs font-medium text-gray-600 transition-all hover:bg-gray-50 hover:text-gray-800"
           >
             No
           </button>
 
           <button
+            type="button"
             onClick={handleDelete}
-            className="rounded-lg bg-red-600 px-5 py-1.5 text-sm font-medium text-white hover:bg-red-700"
+            className="flex-1 cursor-pointer rounded-md bg-red-500 py-1.5 text-xs font-medium text-white transition-all hover:bg-red-600 active:scale-[0.98]"
           >
             Yes
           </button>

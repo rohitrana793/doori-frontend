@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import MainLayout from "../components/layouts/MainLayout";
+import AdminMainLayout from "../components/layouts/admin/AdminMainLayout.jsx";
 import Home from "../features/home/Home";
 import HelsingborgPage from "../pages/order/HelsingborgPage";
 import MalmoPage from "../pages/order/MalmoPage";
@@ -13,34 +14,80 @@ import CateringPage from "../pages/catering/CateringPage.jsx";
 import PageNotFound from "../pages/PageNotFound/PageNotFound.jsx";
 import AdminLogin from "../pages/admin/auth/AdminLogin.jsx";
 import AdminDashboard from "../pages/admin/dashboard/AdminDashboard.jsx";
-import AdminMainLayout from "../components/layouts/admin/AdminMainLayout.jsx";
-import OrderPage from "../pages/admin/order/OrderPage.jsx";
 import AddMenu from "../pages/admin/menu/AddMenu.jsx";
+import AddRestaurant from "../pages/admin/restaurant/AddRestaurant.jsx";
+import AddBranch from "../pages/admin/branch/AddBranch.jsx";
+import ContactList from "../pages/admin/contact/ContactList.jsx";
+import AddHistory from "../pages/admin/about/AddHistory.jsx";
+import WhoWeArePage from "../pages/admin/about/WhoWeArePage.jsx";
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import AdminPageNotFound from "../pages/PageNotFound/AdminPageNotFound.jsx";
+import CatheringList from "../pages/admin/cathering/CatheringList.jsx";
+import FranchiseList from "../pages/admin/about/FranchiseList.jsx";
 
 const AppRoute = () => {
   const router = createBrowserRouter([
+    // ADMIN LOGIN
     {
       path: "/admin",
       element: <AdminLogin />,
     },
+
+    // PROTECTED ADMIN ROUTES
+
     {
-      path: "/admin/dashboard",
-      element: <AdminMainLayout />,
+      path: "/admin",
+      element: <ProtectedRoute />,
       children: [
         {
-          index: true,
-          element: <AdminDashboard />,
-        },
-        {
-          path: "order",
-          element: <OrderPage />,
-        },
-        {
-          path: "menu",
-          element: <AddMenu />,
+          element: <AdminMainLayout />,
+          children: [
+            {
+              path: "dashboard",
+              element: <AdminDashboard />,
+            },
+            {
+              path: "menu",
+              element: <AddMenu />,
+            },
+            {
+              path: "restaurant",
+              element: <AddRestaurant />,
+            },
+            {
+              path: "branch",
+              element: <AddBranch />,
+            },
+            {
+              path: "contact",
+              element: <ContactList />,
+            },
+            {
+              path: "cathering",
+              element: <CatheringList />,
+            },
+            {
+              path: "history",
+              element: <AddHistory />,
+            },
+            {
+              path: "who-we-are",
+              element: <WhoWeArePage />,
+            },
+            {
+              path: "franchise",
+              element: <FranchiseList />,
+            },
+            {
+              path: "*",
+              element: <AdminPageNotFound />,
+            },
+          ],
         },
       ],
     },
+
+    // PUBLIC ROUTES
     {
       path: "/",
       element: <MainLayout />,
@@ -92,6 +139,7 @@ const AppRoute = () => {
       ],
     },
   ]);
+
   return <RouterProvider router={router} />;
 };
 

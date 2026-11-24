@@ -1,6 +1,60 @@
 import MapSection from "../../features/map/MapSection";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { LoaderCircle } from "lucide-react";
+import { franchiseFormSchema } from "../../schema/franchiseFormSchema";
+import { postRequest } from "../../api/apiRequest";
+import { showToast } from "../../utils/customToast";
 
 const ContactPage = () => {
+  const [loading, setLoading] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(franchiseFormSchema),
+    defaultValues: {
+      name: "",
+      surname: "",
+      email: "",
+      franchise: "",
+      message: "",
+    },
+  });
+
+  const onSubmit = async (formData) => {
+    setLoading(true);
+
+    const sendData = {
+      first_name: formData.name,
+      surname: formData.surname,
+      email: formData.email,
+      franchise: formData.franchise,
+      message: formData.message,
+    };
+
+    try {
+      const response = await postRequest("/about/franchise/create/", sendData);
+
+      showToast({
+        response:
+          response.message || "Franchise request submitted successfully.",
+      });
+
+      reset();
+    } catch (error) {
+      showToast({
+        error,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section
       className="
@@ -103,122 +157,174 @@ const ContactPage = () => {
               xl:p-7
             "
           >
-            <form className="flex flex-col gap-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-4"
+            >
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <input
-                  type="text"
-                  placeholder="First name"
-                  className="
-                    h-13
-                    w-full
-                    border
-                    border-[#d5d5d5]
-                    bg-secondary
-                    px-4
-                    font-karla
-                    text-[15px]
-                    text-white
-                    outline-none
-                    placeholder:text-white/85
-                    focus:border-primary
-                    sm:h-13.5
-                    sm:text-[16px]
-                  "
-                />
+                <div>
+                  <input
+                    type="text"
+                    {...register("name")}
+                    placeholder="First name"
+                    className="
+                      h-13
+                      w-full
+                      border
+                      border-[#d5d5d5]
+                      bg-secondary
+                      px-4
+                      font-karla
+                      text-[15px]
+                      text-white
+                      outline-none
+                      placeholder:text-white/85
+                      focus:border-primary
+                      sm:h-13.5
+                      sm:text-[16px]
+                    "
+                  />
 
-                <input
-                  type="text"
-                  placeholder="Surname"
-                  className="
-                    h-13
-                    w-full
-                    border
-                    border-[#d5d5d5]
-                    bg-secondary
-                    px-4
-                    font-karla
-                    text-[15px]
-                    text-white
-                    outline-none
-                    placeholder:text-white/85
-                    focus:border-primary
-                    sm:h-13.5
-                    sm:text-[16px]
-                  "
-                />
+                  {errors.name && (
+                    <p className="mt-1 border border-red-400 bg-white px-2 py-2 text-[14px] font-medium text-red-800">
+                      {errors.name.message}
+                    </p>
+                  )}
+                </div>
+
+                <div>
+                  <input
+                    type="text"
+                    {...register("surname")}
+                    placeholder="Surname"
+                    className="
+                      h-13
+                      w-full
+                      border
+                      border-[#d5d5d5]
+                      bg-secondary
+                      px-4
+                      font-karla
+                      text-[15px]
+                      text-white
+                      outline-none
+                      placeholder:text-white/85
+                      focus:border-primary
+                      sm:h-13.5
+                      sm:text-[16px]
+                    "
+                  />
+
+                  {errors.surname && (
+                    <p className="mt-1 border border-red-400 bg-white px-2 py-2 text-[14px] font-medium text-red-800">
+                      {errors.surname.message}
+                    </p>
+                  )}
+                </div>
               </div>
 
-              <input
-                type="email"
-                placeholder="Email"
-                className="
-                  h-13
-                  w-full
-                  border
-                  border-[#d5d5d5]
-                  bg-secondary
-                  px-4
-                  font-karla
-                  text-[15px]
-                  text-white
-                  outline-none
-                  placeholder:text-white/85
-                  focus:border-primary
-                  sm:h-13.5
-                  sm:text-[16px]
-                "
-              />
+              <div>
+                <input
+                  type="email"
+                  {...register("email")}
+                  placeholder="Email"
+                  className="
+                    h-13
+                    w-full
+                    border
+                    border-[#d5d5d5]
+                    bg-secondary
+                    px-4
+                    font-karla
+                    text-[15px]
+                    text-white
+                    outline-none
+                    placeholder:text-white/85
+                    focus:border-primary
+                    sm:h-13.5
+                    sm:text-[16px]
+                  "
+                />
 
-              <input
-                type="text"
-                placeholder="Franchising"
-                className="
-                  h-13
-                  w-full
-                  border
-                  border-[#d5d5d5]
-                  bg-secondary
-                  px-4
-                  font-karla
-                  text-[15px]
-                  text-white
-                  outline-none
-                  placeholder:text-white/85
-                  focus:border-primary
-                  sm:h-13.5
-                  sm:text-[16px]
-                "
-              />
+                {errors.email && (
+                  <p className="mt-1 border border-red-400 bg-white px-2 py-2 text-[14px] font-medium text-red-800">
+                    {errors.email.message}
+                  </p>
+                )}
+              </div>
 
-              <textarea
-                placeholder="Your message"
-                rows={5}
-                className="
-                  min-h-32
-                  w-full
-                  resize-y
-                  border
-                  border-[#d5d5d5]
-                  bg-secondary
-                  px-4
-                  py-3
-                  font-karla
-                  text-[15px]
-                  text-white
-                  outline-none
-                  placeholder:text-white/85
-                  focus:border-primary
-                  sm:min-h-35
-                  sm:text-[16px]
-                "
-              />
+              <div>
+                <input
+                  type="text"
+                  {...register("franchise")}
+                  placeholder="Franchising"
+                  className="
+                    h-13
+                    w-full
+                    border
+                    border-[#d5d5d5]
+                    bg-secondary
+                    px-4
+                    font-karla
+                    text-[15px]
+                    text-white
+                    outline-none
+                    placeholder:text-white/85
+                    focus:border-primary
+                    sm:h-13.5
+                    sm:text-[16px]
+                  "
+                />
+
+                {errors.franchise && (
+                  <p className="mt-1 border border-red-400 bg-white px-2 py-2 text-[14px] font-medium text-red-800">
+                    {errors.franchise.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <textarea
+                  placeholder="Your message"
+                  {...register("message")}
+                  rows={5}
+                  className="
+                    min-h-32
+                    w-full
+                    resize-y
+                    border
+                    border-[#d5d5d5]
+                    bg-secondary
+                    px-4
+                    py-3
+                    font-karla
+                    text-[15px]
+                    text-white
+                    outline-none
+                    placeholder:text-white/85
+                    focus:border-primary
+                    sm:min-h-35
+                    sm:text-[16px]
+                  "
+                />
+
+                {errors.message && (
+                  <p className="mt-1 border border-red-400 bg-white px-2 py-2 text-[14px] font-medium text-red-800">
+                    {errors.message.message}
+                  </p>
+                )}
+              </div>
 
               <div>
                 <button
                   type="submit"
+                  disabled={loading}
                   className="
+                    flex
                     w-fit
                     cursor-pointer
+                    items-center
+                    justify-center
                     rounded-full
                     bg-primary
                     px-7
@@ -232,11 +338,17 @@ const ContactPage = () => {
                     transition-all
                     duration-300
                     hover:bg-button
+                    disabled:cursor-not-allowed
+                    disabled:opacity-60
                     sm:px-9
                     sm:py-3.5
                   "
                 >
-                  Send
+                  {loading ? (
+                    <LoaderCircle size={22} className="animate-spin" />
+                  ) : (
+                    "Send"
+                  )}
                 </button>
               </div>
             </form>

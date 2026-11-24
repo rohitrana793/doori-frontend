@@ -111,7 +111,7 @@ const HeroSection = () => {
               xl:text-7xl
             "
           >
-            DOOR
+            DOORI
           </h1>
 
           <p

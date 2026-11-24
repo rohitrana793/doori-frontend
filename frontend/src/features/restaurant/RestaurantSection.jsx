@@ -200,7 +200,7 @@ const RestaurantSection = () => {
                       group-hover:text-white
                       sm:text-[12px]
                       sm:tracking-[0.1em]
-                      md:text-[13px]
+                      md:text-[12px]
                       md:tracking-[0.12em]
                     "
                   >

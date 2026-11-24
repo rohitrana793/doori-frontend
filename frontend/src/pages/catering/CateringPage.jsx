@@ -1,4 +1,13 @@
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { LoaderCircle } from "lucide-react";
+import { catheringFormSchema } from "../../schema/catheringFormSchema";
+import { postRequest } from "../../api/apiRequest";
+import { showToast } from "../../utils/customToast";
+
 const CateringPage = () => {
+  const [loading, setLoading] = useState(false);
   const locations = [
     {
       city: "HELSINGBORG",
@@ -22,6 +31,51 @@ const CateringPage = () => {
       email: "info@doori.se",
     },
   ];
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(catheringFormSchema),
+    defaultValues: {
+      name: "",
+      surname: "",
+      email: "",
+      subject: "",
+      message: "",
+      place: "",
+    },
+  });
+
+  const onSubmit = async (formData) => {
+    setLoading(true);
+    const sendData = {
+      first_name: formData.name,
+      surname: formData.surname,
+      email: formData.email,
+      matter: formData.subject,
+      message: formData.message,
+      place: formData.place,
+    };
+    try {
+      const response = await postRequest("/catering/create/", sendData);
+      showToast({ response: response.message });
+      reset({
+        name: "",
+        surname: "",
+        email: "",
+        subject: "",
+        message: "",
+        place: "",
+      });
+    } catch (error) {
+      showToast({ error });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="min-h-screen w-full bg-secondary pt-40 pb-28 md:pt-44 md:pb-8">
@@ -175,10 +229,11 @@ const CateringPage = () => {
               md:p-9
             "
           >
-            <form className="w-full">
+            <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
                 <input
                   type="text"
+                  {...register("name")}
                   placeholder="First name"
                   className="
                     h-14
@@ -195,9 +250,14 @@ const CateringPage = () => {
                     sm:h-15
                   "
                 />
-
+                {errors.name && (
+                  <p className="text-red-800 bg-[#FFF5F5] py-2 px-2 border border-red-400 text-[16px] font-medium">
+                    {errors.name.message}
+                  </p>
+                )}
                 <input
                   type="text"
+                  {...register("surname")}
                   placeholder="Surname"
                   className="
                     h-14
@@ -214,11 +274,17 @@ const CateringPage = () => {
                     sm:h-15
                   "
                 />
+                {errors.surname && (
+                  <p className="text-red-800 bg-[#FFF5F5] py-2 px-2 border border-red-400 text-[16px] font-medium">
+                    {errors.surname.message}
+                  </p>
+                )}
               </div>
 
               <input
                 type="email"
                 placeholder="E-mail"
+                {...register("email")}
                 className="
                   mt-4
                   h-14
@@ -236,10 +302,15 @@ const CateringPage = () => {
                   sm:h-15
                 "
               />
-
+              {errors.email && (
+                <p className="text-red-800 bg-[#FFF5F5] py-2 px-2 border border-red-400 text-[16px] font-medium mt-2">
+                  {errors.email.message}
+                </p>
+              )}
               <input
                 type="text"
                 placeholder="Matter"
+                {...register("subject")}
                 className="
                   mt-4
                   h-14
@@ -257,9 +328,15 @@ const CateringPage = () => {
                   sm:h-15
                 "
               />
+              {errors.subject && (
+                <p className="text-red-800 bg-[#FFF5F5] py-2 px-2 border border-red-400 text-[16px] font-medium mt-2">
+                  {errors.subject.message}
+                </p>
+              )}
 
               <textarea
                 placeholder="Message"
+                {...register("message")}
                 rows={6}
                 className="
                   mt-4
@@ -280,6 +357,11 @@ const CateringPage = () => {
                   sm:min-h-40
                 "
               />
+              {errors.message && (
+                <p className="text-red-800 bg-[#FFF5F5] py-2 px-2 border border-red-400 text-[16px] font-medium">
+                  {errors.message.message}
+                </p>
+              )}
 
               <div className="mt-6 sm:mt-7">
                 <p
@@ -311,6 +393,7 @@ const CateringPage = () => {
                       <input
                         type="radio"
                         name="place"
+                        {...register("place")}
                         value={place}
                         className="h-3.5 w-3.5 cursor-pointer"
                       />
@@ -319,10 +402,16 @@ const CateringPage = () => {
                     </label>
                   ))}
                 </div>
+                {errors.place && (
+                  <p className="text-red-800 bg-[#FFF5F5] py-2 px-2 border border-red-400 text-[16px] font-medium">
+                    {errors.place.message}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
+                disabled={loading}
                 className="
                   mt-5
                   w-fit
@@ -345,7 +434,11 @@ const CateringPage = () => {
                   sm:py-3.5
                 "
               >
-                SEND
+                {loading ? (
+                  <LoaderCircle size={22} className="animate-spin" />
+                ) : (
+                  "SEND"
+                )}
               </button>
             </form>
           </div>
